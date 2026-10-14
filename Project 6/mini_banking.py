@@ -12,7 +12,7 @@ def check_balance():
 
 # Deposite the amount
 def deposite(amount):
-
+    
     if amount > 0:
         balance += amount
         return balance
