@@ -16,14 +16,24 @@ def menu2():
     print("1. Remove Expense")
     print("2. Change Expense")
 
+def menu3():
+    print("1. Change Name")
+    print("2. Change Amount")
+    print("3. Change Category")
+
 # Add Expense details in the data structure
 def add_data(exp_name, exp_amount, exp_category):
     exp_details = {}
     exp_details[exp_name] = {"Amount" : exp_amount,"Category":exp_category}
     expense.append(exp_details)
 
-def remove_data():
-    pass 
+def remove_data(exp_name):
+    if exp_name in expense:
+        expense.remove(expense)
+        print(f"{exp_name} Removed Successfully")
+
+    else:
+        print("Not exists")
 # ====================================================
 
 
@@ -43,14 +53,22 @@ while True:
                     if isinstance(amount,float):
                         add_data(name, amount, category)
                         print("Your Expense Added Successfully")
-
+                        for i in expense:
+                            print(i)  
 
                         choice2 = input("Do you want to change anything ? ('Yes' or 'No')").lower()
                         if choice2 == "yes":
                             menu2()
-                            choice3 = int(input("Enter Your Choice : "))
-                            if choice3 == 1:
-                                pass
+                            try:
+                                choice3 = int(input("Enter Your Choice : "))
+                                if choice3 == 1:
+                                    remove_item = input("Enter the Item : ").title().strip()
+                                    remove_data(remove_item)
+                                elif choice3 == 2:
+                                    choice4 = input("Enter What you want to change : ")
+                            except ValueError:
+                                print("Wrong Input")
+                            
                         elif choice2 == "no":
                             print("Okay")
                             break
@@ -71,6 +89,11 @@ while True:
 
         else:
             print(f"Wrong Option : Try Again")
+
+
+
+
+
 
     except ValueError:
         print("Wrong Value Check Again")
