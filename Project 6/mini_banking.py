@@ -22,7 +22,7 @@ def deposite(amount):
 
 # Withdraw Amount
 def withdraw(amount):
-
+    global balance
     if amount < balance:
         balance -= amount
         return balance
