@@ -16,62 +16,65 @@ sgst = 0.025
 
 
 
-order_detail = {}
-order_detail2 = []
+cart = {}
+order_details = []
 
-print("=" * 50)
-print("             BURGER KING INVOICE")
-print("=" * 50)
 
 
 def show_menu():
+
     for food_item,detail in burger_king.items():
         print(f"\n{food_item} \nPrice : {detail[-1]} | Available : {detail[0]}")
 
 
-def order(food_item,quantity):
+def orders(food_name,qty=1):
 
-    if food_item in burger_king:
-        if quantity <= burger_king[food_item][0]:
-            burger_king[food_item][0] -= quantity
-            order_detail[food_item] = order_detail2.append(quantity,burger_king[food_item][-1] * quantity)
-            order_detail[food_item] = order_detail2.append(burger_king[food_item][-1] * quantity)
-        else:
-            print(f"More then the quantity")
-    else:
-        print(f"{food_item} Not Available")
-
-
-def remove_order(food_item):
-    if food_item in order_detail:
-        del order_detail[food_item]
-
-    else:
-        print(f"{food_item} Not found")
-
-
-def change_quantity(food_item,new_quantity):
-    if food_item in order_detail:
-        if new_quantity <= burger_king[food_item][0]:
-            order_detail[food_item] = order_detail2[0] = new_quantity
-            print(f"Quantity Changed")
+    if food_name in burger_king:
+        if qty <= burger_king[food_name][0]:
+            item_total = burger_king[food_name][-1] * qty
+            order_details.append(qty)
+            order_details.append(item_total)
+            cart[food_name] = order_details
+            burger_king[food_name][0] - qty
+            print(f"{food_name} Added in the cart Successfully")
 
         else:
-            print("Try Again, You enter quantity more then the available")
+            print("Quantity Not available")
     else:
-        print(f"{food_item} Not Found")
+        print(f"{food_name} not Found")
 
 
-def invoice():
-    if order_detail != None:
-        sub_total = 0
-        for food,food_detail in order_detail:
-            sub_total += order_detail[food_detail][-1]
-            print(f"{food}\t{food_detail[0]}t\{food_detail[-1]}")
+def remove_item(food_name):
+    if food_name in burger_king:
+        cart.pop(food_name)
+        print(f"{food_name} Removed from cart")
 
-        print(f"Subtotal\t\t{sub_total}")
-        print(f"CGST @ 2.5%\t\t{sub_total*cgst}")
-        print(f"SGST @ 2.5%\t\t{sub_total*sgst}")
-        print(f"GRAND TOTAL\t\t{(sub_total*cgst)+(sub_total*sgst)+sub_total}")
-        
+    else:
+        print(f"{food_name} Not found")
 
+
+def update_cart(food_name,qty):
+    if food_name in cart:
+        if qty <= burger_king[food_name][0]:
+            cart[food_name][0] = qty
+            cart[food_name][-1] = burger_king[food_name][-1] * qty
+            print(f"Quantity Updated")        
+
+        else:
+            print(f"Quantity Not available")
+    else:
+        print(f"{food_name} not found")
+
+
+    
+print("=" * 50)
+print("             BURGER KING INVOICE")
+print("=" * 50)
+
+orders("Whopper Burger",1)
+orders("Veg Burger",1)
+print(cart)
+remove_item("Veg Burger")
+print(cart)
+update_cart("Whopper Burger",2)
+print(cart)

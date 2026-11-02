@@ -1,7 +1,7 @@
 import random as r
 
 attempts = 5
-number = r.randint(1,20)
+number = r.randint(1,100)
 
 guess_number = 0
 
