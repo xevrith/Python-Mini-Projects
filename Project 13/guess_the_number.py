@@ -11,7 +11,11 @@ while attempts >= 1:
         print("You Won")
         break
     else:
-        print("Wrong Guess")
+        if guess_number > number:
+            print("Too High")
+
+        else:
+            print("Too low")
 
     attempts -= 1
     print(f"{attempts} Attempts Left")
