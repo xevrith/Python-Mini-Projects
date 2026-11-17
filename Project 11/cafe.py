@@ -1,104 +1,95 @@
-# Cafe Management System 
+# Cafe Management System
 
 cafe = {
-    "Coffee": 120.0,
-    "Tea": 50.0,
-    "Cappuccino": 180.0,
-    "Latte": 200.0,
-    "Espresso": 100.0,
-    "Sandwich": 150.0,
-    "Burger": 220.0,
-    "Pizza": 300.0,
-    "Pasta": 250.0,
-    "Brownie": 130.0
+    "Coffee": 120.0, "Tea": 50.0, "Cappuccino": 180.0,
+    "Latte": 200.0, "Espresso": 100.0, "Sandwich": 150.0,
+    "Burger": 220.0, "Pizza": 300.0, "Pasta": 250.0, "Brownie": 130.0,
 }
-count = 0
 
-option = ["see","update","delete","exit","display","add"]
-# ============================ FUNCTIONS ===========================
+
 def display_menu():
-    for item,price in cafe.items():
-        print(f"{item} : {price}")
-
-def options():
-    print(f"1. Show Menu")
-    print(f"2. Add Item")
-    print(f"3. Delete Item")
-    print(f"4. Update Price")
-    print(f"5. Exit")
+    print("\n=== Cafe Menu ===")
+    if not cafe:
+        print("The menu is currently empty.")
+    for item, price in cafe.items():
+        print(f"{item}: ₹{price:.2f}")
 
 
-def add_item(item_name,price):
-    if item_name not in cafe:
-        cafe[item_name] = price
-        print(f"Item Added Successfully")
-
+def add_item(item_name, price):
+    if not item_name:
+        print("Item name cannot be empty.")
+    elif item_name in cafe:
+        print("Item already exists.")
+    elif price <= 0:
+        print("Price must be greater than zero.")
     else:
-        print("Item Already Exist")
+        cafe[item_name] = price
+        print("Item added successfully.")
 
 
 def remove_item(item_name):
     if item_name in cafe:
         del cafe[item_name]
-        print(f"{item_name} Removed Successfully")
-
+        print(f"{item_name} removed successfully.")
     else:
-        print(f"{item_name} not exists")
+        print("Item does not exist.")
 
 
-def update_price(item_name,new_price):
-    if item_name in cafe:
-        if new_price > 0:
-            cafe[item_name] = new_price
-            print(f"Price Updated Successfully")
+def update_price(item_name, new_price):
+    if item_name not in cafe:
+        print("Item does not exist.")
+    elif new_price <= 0:
+        print("Price must be greater than zero.")
+    else:
+        cafe[item_name] = new_price
+        print("Price updated successfully.")
 
+
+def main():
+    changes = 0
+    while True:
+        print("\n1. Show Menu")
+        print("2. Add Item")
+        print("3. Delete Item")
+        print("4. Update Price")
+        print("5. Exit")
+        choice = input("Enter your choice: ").strip()
+
+        if choice == "1":
+            display_menu()
+        elif choice == "2":
+            name = input("Enter item name: ").strip().title()
+            try:
+                price = float(input("Enter item price: ₹"))
+                before = len(cafe)
+                add_item(name, price)
+                if len(cafe) > before:
+                    changes += 1
+            except ValueError:
+                print("Enter a valid numeric price.")
+        elif choice == "3":
+            name = input("Enter item name to delete: ").strip().title()
+            if name in cafe:
+                remove_item(name)
+                changes += 1
+            else:
+                remove_item(name)
+        elif choice == "4":
+            name = input("Enter item name: ").strip().title()
+            try:
+                price = float(input("Enter new price: ₹"))
+                old_price = cafe.get(name)
+                update_price(name, price)
+                if name in cafe and cafe[name] != old_price:
+                    changes += 1
+            except ValueError:
+                print("Enter a valid numeric price.")
+        elif choice == "5":
+            print(f"Thank you. Menu changes made: {changes}")
+            break
         else:
-            print(f"{new_price} is less then 0 try again")
-    else:
-        print("Item not exists")
+            print("Invalid choice. Select 1 to 5.")
 
-# ================================ FUNCTIONS ENDS HERE ============================
 
-# ==================================== LOOPS ========================================
-while True:
-    print()
-    options()
-
-    choice = input("Enter your Choice : ").lower().strip()
-    
-    if choice == "show":
-        count += 1
-        display_menu()
-
-    elif choice == "add":
-        new_item = input("Enter item name : ").title()
-        try:
-            item_price = float(input("Enter item Price : "))
-            add_item(new_item,item_price)
-            count += 1
-        except ValueError:
-            print(f"Wrong Value Try again")
-
-    elif choice == "delete":
-        remove_name = input("Enter name you wanna remove : ").title()
-        remove_item(remove_name)
-        count += 1
-
-    elif choice == "update":
-        item_name = input("Enter item name : ").title()
-        try:
-            item_price = float(input("Enter item Price : "))
-            update_price(item_name,item_price)
-            count += 1
-        except ValueError:
-            print(f"Wrong Value Try again")
-
-    elif choice == "exit":
-        print("Thanks for Using our services")
-        print(f"{count} time you changed the main menu")
-        break
-
-    else:
-        print(f"Wrong Choice, try again")
-
-# =================================================================
+if __name__ == "__main__":
+    main()
