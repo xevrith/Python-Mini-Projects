@@ -1,99 +1,125 @@
 # Expense Tracker
-expense = []
+expenses = []
 
 
-
-# =============================== Functions
-# Show the Options
-def menu():
-    print("=== Expense Tracker ===")
-    print()
+def show_menu():
+    print("\n=== Expense Tracker ===")
     print("1. Add Expense")
     print("2. View All Expenses")
-    print("2. View Summary")
+    print("3. View Summary")
+    print("4. Edit Expense")
+    print("5. Remove Expense")
+    print("0. Exit")
 
-def menu2():
-    print("1. Remove Expense")
-    print("2. Change Expense")
 
-def menu3():
-    print("1. Change Name")
-    print("2. Change Amount")
-    print("3. Change Category")
+def add_expense(name, amount, category):
+    if not name or not category:
+        print("Name and category cannot be empty.")
+        return
+    if amount <= 0:
+        print("Amount must be greater than zero.")
+        return
+    expenses.append({"name": name, "amount": amount, "category": category})
+    print("Expense added successfully.")
 
-# Add Expense details in the data structure
-def add_data(exp_name, exp_amount, exp_category):
-    exp_details = {}
-    exp_details[exp_name] = {"Amount" : exp_amount,"Category":exp_category}
-    expense.append(exp_details)
 
-def remove_data(exp_name):
-    if exp_name in expense:
-        expense.remove(expense)
-        print(f"{exp_name} Removed Successfully")
+def view_expenses():
+    if not expenses:
+        print("No expenses recorded.")
+        return
+    print("\n--- All Expenses ---")
+    for index, item in enumerate(expenses, start=1):
+        print(f"{index}. {item['name']} | {item['category']} | ₹{item['amount']:.2f}")
 
+
+def show_summary():
+    if not expenses:
+        print("No expenses to summarize.")
+        return
+    total = sum(item["amount"] for item in expenses)
+    print(f"Total expenses: ₹{total:.2f}")
+    print(f"Number of expenses: {len(expenses)}")
+    category_totals = {}
+    for item in expenses:
+        category = item["category"]
+        category_totals[category] = category_totals.get(category, 0) + item["amount"]
+    print("Category-wise totals:")
+    for category, amount in category_totals.items():
+        print(f"{category}: ₹{amount:.2f}")
+
+
+def edit_expense(index, field, new_value):
+    if index < 1 or index > len(expenses):
+        print("Invalid expense number.")
+        return
+    if field == "name" or field == "category":
+        if not new_value.strip():
+            print("Value cannot be empty.")
+            return
+        expenses[index - 1][field] = new_value.strip().title()
+    elif field == "amount":
+        try:
+            amount = float(new_value)
+            if amount <= 0:
+                print("Amount must be greater than zero.")
+                return
+            expenses[index - 1][field] = amount
+        except ValueError:
+            print("Enter a valid amount.")
+            return
     else:
-        print("Not exists")
-# ====================================================
+        print("Choose name, amount, or category.")
+        return
+    print("Expense updated successfully.")
 
 
-while True:
-    menu()
+def remove_expense(index):
+    if index < 1 or index > len(expenses):
+        print("Invalid expense number.")
+        return
+    removed = expenses.pop(index - 1)
+    print(f"{removed['name']} removed successfully.")
 
-    try:
-        print("Type 0 to stop the loop")
-        choice = int(input("Enter Your Choice : "))
-        
-        if choice == 1:
-            while True:
-                try:
-                    name = input("Enter the Name : ").title().strip()
-                    amount = float(input("Enter the amount : "))
-                    category = input("Enter the Category : ").title().strip()
-                    if isinstance(amount,float):
-                        add_data(name, amount, category)
-                        print("Your Expense Added Successfully")
-                        for i in expense:
-                            print(i)  
 
-                        choice2 = input("Do you want to change anything ? ('Yes' or 'No')").lower()
-                        if choice2 == "yes":
-                            menu2()
-                            try:
-                                choice3 = int(input("Enter Your Choice : "))
-                                if choice3 == 1:
-                                    remove_item = input("Enter the Item : ").title().strip()
-                                    remove_data(remove_item)
-                                elif choice3 == 2:
-                                    choice4 = input("Enter What you want to change : ")
-                            except ValueError:
-                                print("Wrong Input")
-                            
-                        elif choice2 == "no":
-                            print("Okay")
-                            break
-                        else:
-                            print("Wrong Input Try Again")        
-                except ValueError:
-                    print("Check the Value, Try Again")
+def main():
+    while True:
+        show_menu()
+        choice = input("Enter your choice: ").strip()
 
-        elif choice == 2:
-            pass 
-
-        elif choice == 3:
-            pass
-
-        elif choice == 0:
-            print(f"Thanks For Using our service")
+        if choice == "1":
+            name = input("Expense name: ").strip().title()
+            category = input("Category: ").strip().title()
+            try:
+                amount = float(input("Amount: ₹"))
+                add_expense(name, amount, category)
+            except ValueError:
+                print("Enter a valid numeric amount.")
+        elif choice == "2":
+            view_expenses()
+        elif choice == "3":
+            show_summary()
+        elif choice == "4":
+            view_expenses()
+            try:
+                index = int(input("Expense number to edit: "))
+                field = input("Field (name/amount/category): ").strip().lower()
+                value = input("New value: ").strip()
+                edit_expense(index, field, value)
+            except ValueError:
+                print("Enter a valid expense number.")
+        elif choice == "5":
+            view_expenses()
+            try:
+                index = int(input("Expense number to remove: "))
+                remove_expense(index)
+            except ValueError:
+                print("Enter a valid expense number.")
+        elif choice == "0":
+            print("Thank you for using Expense Tracker.")
             break
-
         else:
-            print(f"Wrong Option : Try Again")
+            print("Invalid choice. Select 0 to 5.")
 
 
-
-
-
-
-    except ValueError:
-        print("Wrong Value Check Again")
+if __name__ == "__main__":
+    main()
