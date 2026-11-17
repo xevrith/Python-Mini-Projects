@@ -1,51 +1,47 @@
-# Calculator 
+# Basic Calculator
 
 
-print("Use (+) For Addition)")
-print("Use (-) For Subtraction)")
-print("Use (*) For Multiplication)")
-print("Use (/) For Division)")
-print("Use (%) For Reminder)")
-print("Use (**) For Power)")
-print("Write 'Exit' and to stop the loop and 'Yes' To continue")
-
-while True:
-
-    command = input("Enter exist to stop the calc : ").lower()
-
-    if command == "exit":
-        print("Thank for use the calculator")
-        break
-
-    elif command == "yes":
-        try:
-            num1 = int(input("Enter the number : "))
-            operation = input("Enter the Operation : ")
-            num2 = int(input("Enter the number : "))
-
-            if operation == "+":
-                print(f"Addition : {num1 + num2}")
-
-            elif operation == "-":
-                print(f"Substraction: {num1 - num2}")
-
-            elif operation == "*":
-                print(f"Multiplication: {num1 * num2}")  
-
-            elif operation == "**":
-                print(f"Power: {num1 ** num2}") 
-
-            elif operation == "%":
-                print(f"Multiplication: {num1 % num2}")
-
-            else:
-                print(f"Division : {num1 / num2}")
-
-        except ValueError:
-            print("Wrong Input, Try Again")
-
-        except ZeroDivisionError:
-            print("Divided By 0, Try again")
+def calculate(num1, operation, num2):
+    if operation == "+":
+        return num1 + num2
+    elif operation == "-":
+        return num1 - num2
+    elif operation == "*":
+        return num1 * num2
+    elif operation == "/":
+        if num2 == 0:
+            raise ZeroDivisionError("Cannot divide by zero.")
+        return num1 / num2
+    elif operation == "%":
+        if num2 == 0:
+            raise ZeroDivisionError("Cannot calculate remainder with zero.")
+        return num1 % num2
+    elif operation == "**":
+        return num1 ** num2
     else:
-        print("Wrong Input")
-             
+        raise ValueError("Unsupported operation.")
+
+
+def main():
+    print("=== Calculator ===")
+    print("Operations: +  -  *  /  %  **")
+    print("Type 'exit' at the operation prompt to quit.")
+
+    while True:
+        try:
+            num1 = float(input("\nEnter first number: "))
+            operation = input("Enter operation: ").strip()
+            if operation.lower() == "exit":
+                print("Thank you for using the calculator.")
+                break
+            num2 = float(input("Enter second number: "))
+            result = calculate(num1, operation, num2)
+            print(f"Result: {result:g}")
+        except ValueError as error:
+            print(error if str(error) == "Unsupported operation." else "Please enter valid numbers and an available operation.")
+        except ZeroDivisionError as error:
+            print(error)
+
+
+if __name__ == "__main__":
+    main()
