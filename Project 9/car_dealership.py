@@ -8,32 +8,59 @@ cars = [
     ["C107", "Kia", "Seltos", 2024, 1600000, "Diesel", 4],
     ["C108", "Volkswagen", "Virtus", 2025, 1700000, "Petrol", 2],
     ["C109", "Skoda", "Slavia", 2024, 1500000, "Petrol", 3],
-    ["C110", "MG", "Hector", 2025, 2200000, "Diesel", 2]
+    ["C110", "MG", "Hector", 2025, 2200000, "Diesel", 2],
 ]
 
+
 def display():
-    print("=== Car Detail ===")
+    print("\n=== Available Cars ===")
     for car in cars:
-        print(car)
+        print(f"{car[0]} | {car[1]} {car[2]} | {car[3]} | ₹{car[4]:,} | {car[5]} | Stock: {car[6]}")
 
 
 def details():
-    print(f"Total Number of Cars Models : {len(cars)}")
+    print(f"Total models: {len(cars)}")
+    print(f"Total vehicles in stock: {sum(car[6] for car in cars)}")
 
 
 def display_brand():
-    car_details = [f"Brand : {car[1]} | Model : {car[2]}"for car in cars]
-    for car in car_details:
-        print(car)
+    for car in cars:
+        print(f"Brand: {car[1]} | Model: {car[2]}")
 
 
 def search_car(car_id):
-    if any(car_id in car for car in cars):
+    for car in cars:
+        if car[0].lower() == car_id.lower():
+            print(f"{car[0]} | {car[1]} {car[2]} | {car[3]} | ₹{car[4]:,} | {car[5]} | Stock: {car[6]}")
+            return car
+    print("Car ID not found.")
+    return None
 
-        for car in cars.index(car_id):
-            print(car)
-    else:
-        print(f"Car is not available")
 
-print("C101" in cars)
-        
+def main():
+    while True:
+        print("\n=== Car Dealership ===")
+        print("1. Display all cars")
+        print("2. Show inventory summary")
+        print("3. Display brands and models")
+        print("4. Search by car ID")
+        print("5. Exit")
+        choice = input("Choose an option: ").strip()
+
+        if choice == "1":
+            display()
+        elif choice == "2":
+            details()
+        elif choice == "3":
+            display_brand()
+        elif choice == "4":
+            search_car(input("Enter car ID (e.g. C101): ").strip())
+        elif choice == "5":
+            print("Goodbye.")
+            break
+        else:
+            print("Invalid choice. Select 1 to 5.")
+
+
+if __name__ == "__main__":
+    main()
